@@ -1,4 +1,4 @@
-package mst
+package v1
 
 import (
 	"fmt"
@@ -23,7 +23,7 @@ import (
 // @Param id query int false "ID"
 // @Param page query int false "Page"
 // @Success 200 {object} app.Response
-// @Router /api/v1/mst/class [get]
+// @Router /api/v1/class [get]
 func GetClasses(c *gin.Context) {
 	var (
 		logger = logging.Logger{}
@@ -76,7 +76,7 @@ type AddClassForm struct {
 // @Produce  json
 // @Param req body mst.AddClassForm true "req param"
 // @Success 200 {object} app.Response
-// @Router /api/v1/mst/class [post]
+// @Router /api/v1/class [post]
 func AddClass(c *gin.Context) {
 	var (
 		logger         = logging.Logger{}
@@ -125,7 +125,7 @@ type EditClassForm struct {
 // @Param id path int true "ID"
 // @Param req body mst.EditClassForm true "req param"
 // @Success 200 {object} app.Response
-// @Router /api/v1/mst/class/{id} [put]
+// @Router /api/v1/class/{id} [put]
 func EditClass(c *gin.Context) {
 	var (
 		logger         = logging.Logger{}
@@ -179,7 +179,7 @@ func EditClass(c *gin.Context) {
 // @Produce json
 // @Param id path int true "ID"
 // @Success 200 {object} app.Response
-// @Router /api/v1/mst/class/{id} [delete]
+// @Router /api/v1/class/{id} [delete]
 func DeleteClass(c *gin.Context) {
 	var (
 		logger         = logging.Logger{}

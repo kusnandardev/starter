@@ -5,7 +5,6 @@ import (
 	"kusnandartoni/starter/midleware/jwt"
 	"kusnandartoni/starter/pkg/setting"
 	v1 "kusnandartoni/starter/routers/api/v1"
-	"kusnandartoni/starter/routers/api/v1/mst"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -28,19 +27,15 @@ func InitRouter() *gin.Engine {
 	r.PUT("/api/auth/reset", v1.Reset)
 	r.POST("/api/auth/register", v1.Register)
 
-	v1 := r.Group("/api/v1")
+	apiV1 := r.Group("/api/v1")
 	{
-		master := v1.Group(("/mst"))
+		class := apiV1.Group("/class")
+		class.Use(jwt.JWT())
 		{
-			class := master.Group("/class")
-			class.Use(jwt.JWT())
-			{
-				class.GET("", mst.GetClasses)
-				class.POST("", mst.AddClass)
-				class.PUT(":id", mst.EditClass)
-				class.DELETE(":id", mst.DeleteClass)
-			}
-
+			class.GET("", v1.GetClasses)
+			class.POST("", v1.AddClass)
+			class.PUT(":id", v1.EditClass)
+			class.DELETE(":id", v1.DeleteClass)
 		}
 
 	}
