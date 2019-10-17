@@ -1,0 +1,343 @@
+basePath: '{{.BasePath}}'
+definitions:
+  app.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+  mst.AddClassForm:
+    properties:
+      description:
+        type: string
+      headline:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+    type: object
+  mst.EditClassForm:
+    properties:
+      description:
+        type: string
+      headline:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+    type: object
+  v1.ForgotForm:
+    properties:
+      email:
+        type: string
+    type: object
+  v1.LoginForm:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  v1.RegisterForm:
+    properties:
+      address:
+        type: string
+      biography:
+        type: string
+      birthday:
+        type: string
+      company:
+        type: string
+      email:
+        type: string
+      experience_level:
+        type: string
+      expertise:
+        type: string
+      first_name:
+        type: string
+      full_name:
+        type: string
+      gender:
+        type: string
+      highest_degree:
+        type: string
+      industry:
+        type: string
+      institution:
+        type: string
+      last_name:
+        type: string
+      major:
+        type: string
+      midle_name:
+        type: string
+      occupation:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+      photo_url:
+        type: string
+      university:
+        type: string
+      user_roles:
+        type: string
+      username:
+        type: string
+      verified:
+        type: boolean
+    type: object
+  v1.ResetForm:
+    properties:
+      password:
+        type: string
+      token:
+        type: string
+    type: object
+host: '{{.Host}}'
+info:
+  contact:
+    email: kusnandartoni@gmail.com
+    name: Toni Kusnandar
+    url: https://www.linkedin.com/in/kusnandartoni/
+  description: Backend REST API for golang starter
+  license: {}
+  title: Starter
+  version: "1.0"
+paths:
+  /api/auth/forgot:
+    post:
+      parameters:
+      - description: Platform
+        in: path
+        name: platform
+        required: true
+        type: string
+      - description: req param
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/v1.ForgotForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+            type: object
+      summary: Forgot password
+      tags:
+      - Auth
+  /api/auth/login:
+    post:
+      parameters:
+      - description: Platform
+        in: path
+        name: platform
+        required: true
+        type: string
+      - description: req param
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/v1.LoginForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+            type: object
+      summary: Login to get auth
+      tags:
+      - Auth
+  /api/auth/register:
+    post:
+      parameters:
+      - description: Platform
+        in: path
+        name: platform
+        required: true
+        type: string
+      - description: 'req param #changes are possible to adjust the form of the registration
+          form from forntend'
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/v1.RegisterForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+            type: object
+      summary: Register a Member
+      tags:
+      - Auth
+  /api/auth/reset:
+    put:
+      parameters:
+      - description: Platform
+        in: path
+        name: platform
+        required: true
+        type: string
+      - description: req param
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/v1.ResetForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+            type: object
+      summary: Reset email registration
+      tags:
+      - Auth
+  /api/auth/verify:
+    get:
+      parameters:
+      - description: Platform
+        in: path
+        name: platform
+        required: true
+        type: string
+      - description: Token
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+            type: object
+      summary: Verify email registration
+      tags:
+      - Auth
+  /api/v1/mst/class:
+    get:
+      parameters:
+      - description: ID
+        in: query
+        name: id
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get Classes
+      tags:
+      - MST Classes
+    post:
+      parameters:
+      - description: req param
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/mst.AddClassForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: AddClass
+      tags:
+      - MST Classes
+  /api/v1/mst/class/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete  Class
+      tags:
+      - MST Classes
+    put:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: req param
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/mst.EditClassForm'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Edit Class
+      tags:
+      - MST Classes
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
