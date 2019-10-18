@@ -7,9 +7,9 @@ services:
     ports:
       - "55432:5432"
     environment:
-      - POSTGRES_USER:"postgres"
-      - POSTGRES_PASSWORD:"postgres"
-      - POSTGRES_DB:"starter"
+      - POSTGRES_USER:postgres
+      - POSTGRES_PASSWORD:postgres
+      - POSTGRES_DB:starter
     volumes:
       - "pgdata:/var/lib/postgresql/data/"
 
@@ -17,7 +17,7 @@ services:
     container_name: redis
     image: redis
     ports:
-      - "66379:6379"
+      - "6379:6379"
     volumes:
       - "redisdata:/data"
 
