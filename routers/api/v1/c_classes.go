@@ -55,7 +55,7 @@ func GetClasses(c *gin.Context) {
 		return
 	}
 
-	logger.Info(appG.Response(http.StatusOK, "OK", map[string]interface{}{
+	logger.Info(appG.Response(http.StatusOK, "Ok", map[string]interface{}{
 		"list":  classes,
 		"total": count,
 	}))
@@ -74,7 +74,7 @@ type AddClassForm struct {
 // @Security ApiKeyAuth
 // @Tags MST Classes
 // @Produce  json
-// @Param req body mst.AddClassForm true "req param"
+// @Param req body v1.AddClassForm true "req param"
 // @Success 200 {object} app.Response
 // @Router /api/v1/class [post]
 func AddClass(c *gin.Context) {
@@ -106,7 +106,7 @@ func AddClass(c *gin.Context) {
 		return
 	}
 
-	logger.Info(appG.Response(http.StatusOK, "OK", form))
+	logger.Info(appG.Response(http.StatusOK, "Data berhasil ditambah", form))
 }
 
 // EditClassForm :
@@ -123,7 +123,7 @@ type EditClassForm struct {
 // @Tags MST Classes
 // @Produce  json
 // @Param id path int true "ID"
-// @Param req body mst.EditClassForm true "req param"
+// @Param req body v1.EditClassForm true "req param"
 // @Success 200 {object} app.Response
 // @Router /api/v1/class/{id} [put]
 func EditClass(c *gin.Context) {
@@ -168,7 +168,7 @@ func EditClass(c *gin.Context) {
 		logger.Error(appG.Response(http.StatusInternalServerError, fmt.Sprintf("%v", err), nil))
 		return
 	}
-	logger.Info(appG.Response(http.StatusOK, "OK", form))
+	logger.Info(appG.Response(http.StatusOK, "Data berhasil diubah", form))
 
 }
 
@@ -210,5 +210,5 @@ func DeleteClass(c *gin.Context) {
 		return
 	}
 
-	logger.Info(appG.Response(http.StatusOK, "OK", nil))
+	logger.Info(appG.Response(http.StatusOK, "Data berhasil dihapus", id))
 }

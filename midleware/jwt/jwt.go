@@ -23,8 +23,8 @@ func JWT() gin.HandlerFunc {
 			msg = "Auth Token Required"
 		} else {
 			claims, err := util.ParseToken(token)
+			code = http.StatusUnauthorized
 			if err != nil {
-				code = http.StatusNetworkAuthenticationRequired
 				switch err.(*jwt.ValidationError).Errors {
 				case jwt.ValidationErrorExpired:
 					msg = "Token Expired"
@@ -34,7 +34,6 @@ func JWT() gin.HandlerFunc {
 			} else {
 				valid := claims.VerifyIssuer(setting.AppSetting.Issuer, true)
 				if !valid {
-					code = http.StatusUnauthorized
 					msg = "Issuer is not valid"
 				}
 				c.Set("claims", claims)

@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"kusnandartoni/starter/services/svcmembers"
 	"fmt"
+	"kusnandartoni/starter/services/svcmembers"
 	"net/http"
 
 	"github.com/jinzhu/gorm"

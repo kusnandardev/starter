@@ -9,7 +9,7 @@ definitions:
       msg:
         type: string
     type: object
-  mst.AddClassForm:
+  v1.AddClassForm:
     properties:
       description:
         type: string
@@ -20,7 +20,7 @@ definitions:
       name:
         type: string
     type: object
-  mst.EditClassForm:
+  v1.EditClassForm:
     properties:
       description:
         type: string
@@ -45,51 +45,13 @@ definitions:
     type: object
   v1.RegisterForm:
     properties:
-      address:
-        type: string
-      biography:
-        type: string
-      birthday:
-        type: string
-      company:
-        type: string
       email:
-        type: string
-      experience_level:
-        type: string
-      expertise:
-        type: string
-      first_name:
         type: string
       full_name:
         type: string
-      gender:
-        type: string
-      highest_degree:
-        type: string
-      industry:
-        type: string
-      institution:
-        type: string
-      last_name:
-        type: string
-      major:
-        type: string
-      midle_name:
-        type: string
-      occupation:
-        type: string
       password:
         type: string
-      phone_number:
-        type: string
       photo_url:
-        type: string
-      university:
-        type: string
-      user_roles:
-        type: string
-      username:
         type: string
       verified:
         type: boolean
@@ -115,11 +77,6 @@ paths:
   /api/auth/forgot:
     post:
       parameters:
-      - description: Platform
-        in: path
-        name: platform
-        required: true
-        type: string
       - description: req param
         in: body
         name: req
@@ -141,11 +98,6 @@ paths:
   /api/auth/login:
     post:
       parameters:
-      - description: Platform
-        in: path
-        name: platform
-        required: true
-        type: string
       - description: req param
         in: body
         name: req
@@ -167,11 +119,6 @@ paths:
   /api/auth/register:
     post:
       parameters:
-      - description: Platform
-        in: path
-        name: platform
-        required: true
-        type: string
       - description: 'req param #changes are possible to adjust the form of the registration
           form from forntend'
         in: body
@@ -194,11 +141,6 @@ paths:
   /api/auth/reset:
     put:
       parameters:
-      - description: Platform
-        in: path
-        name: platform
-        required: true
-        type: string
       - description: req param
         in: body
         name: req
@@ -220,11 +162,6 @@ paths:
   /api/auth/verify:
     get:
       parameters:
-      - description: Platform
-        in: path
-        name: platform
-        required: true
-        type: string
       - description: Token
         in: query
         name: token
@@ -241,7 +178,7 @@ paths:
       summary: Verify email registration
       tags:
       - Auth
-  /api/v1/mst/class:
+  /api/v1/class:
     get:
       parameters:
       - description: ID
@@ -272,7 +209,7 @@ paths:
         name: req
         required: true
         schema:
-          $ref: '#/definitions/mst.AddClassForm'
+          $ref: '#/definitions/v1.AddClassForm'
           type: object
       produces:
       - application/json
@@ -287,7 +224,7 @@ paths:
       summary: AddClass
       tags:
       - MST Classes
-  /api/v1/mst/class/{id}:
+  /api/v1/class/{id}:
     delete:
       parameters:
       - description: ID
@@ -320,7 +257,7 @@ paths:
         name: req
         required: true
         schema:
-          $ref: '#/definitions/mst.EditClassForm'
+          $ref: '#/definitions/v1.EditClassForm'
           type: object
       produces:
       - application/json

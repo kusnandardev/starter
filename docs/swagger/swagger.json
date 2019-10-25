@@ -25,13 +25,6 @@
                 "summary": "Forgot password",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Platform",
-                        "name": "platform",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
                         "description": "req param",
                         "name": "req",
                         "in": "body",
@@ -63,13 +56,6 @@
                 ],
                 "summary": "Login to get auth",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Platform",
-                        "name": "platform",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "description": "req param",
                         "name": "req",
@@ -103,13 +89,6 @@
                 "summary": "Register a Member",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Platform",
-                        "name": "platform",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
                         "description": "req param #changes are possible to adjust the form of the registration form from forntend",
                         "name": "req",
                         "in": "body",
@@ -141,13 +120,6 @@
                 ],
                 "summary": "Reset email registration",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Platform",
-                        "name": "platform",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "description": "req param",
                         "name": "req",
@@ -182,13 +154,6 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Platform",
-                        "name": "platform",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "Token",
                         "name": "token",
                         "in": "query",
@@ -206,7 +171,7 @@
                 }
             }
         },
-        "/api/v1/mst/class": {
+        "/api/v1/class": {
             "get": {
                 "security": [
                     {
@@ -265,7 +230,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/mst.AddClassForm"
+                            "$ref": "#/definitions/v1.AddClassForm"
                         }
                     }
                 ],
@@ -280,7 +245,7 @@
                 }
             }
         },
-        "/api/v1/mst/class/{id}": {
+        "/api/v1/class/{id}": {
             "put": {
                 "security": [
                     {
@@ -309,7 +274,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/mst.EditClassForm"
+                            "$ref": "#/definitions/v1.EditClassForm"
                         }
                     }
                 ],
@@ -372,7 +337,7 @@
                 }
             }
         },
-        "mst.AddClassForm": {
+        "v1.AddClassForm": {
             "type": "object",
             "properties": {
                 "description": {
@@ -389,7 +354,7 @@
                 }
             }
         },
-        "mst.EditClassForm": {
+        "v1.EditClassForm": {
             "type": "object",
             "properties": {
                 "description": {
@@ -428,73 +393,16 @@
         "v1.RegisterForm": {
             "type": "object",
             "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "biography": {
-                    "type": "string"
-                },
-                "birthday": {
-                    "type": "string"
-                },
-                "company": {
-                    "type": "string"
-                },
                 "email": {
-                    "type": "string"
-                },
-                "experience_level": {
-                    "type": "string"
-                },
-                "expertise": {
-                    "type": "string"
-                },
-                "first_name": {
                     "type": "string"
                 },
                 "full_name": {
                     "type": "string"
                 },
-                "gender": {
-                    "type": "string"
-                },
-                "highest_degree": {
-                    "type": "string"
-                },
-                "industry": {
-                    "type": "string"
-                },
-                "institution": {
-                    "type": "string"
-                },
-                "last_name": {
-                    "type": "string"
-                },
-                "major": {
-                    "type": "string"
-                },
-                "midle_name": {
-                    "type": "string"
-                },
-                "occupation": {
-                    "type": "string"
-                },
                 "password": {
                     "type": "string"
                 },
-                "phone_number": {
-                    "type": "string"
-                },
                 "photo_url": {
-                    "type": "string"
-                },
-                "university": {
-                    "type": "string"
-                },
-                "user_roles": {
-                    "type": "string"
-                },
-                "username": {
                     "type": "string"
                 },
                 "verified": {

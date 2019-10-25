@@ -60,7 +60,7 @@ func Setup() {
 func autoMigrate() {
 	// Add auto migrate bellow this line
 	log.Println("STARTING AUTO MIGRATE ")
-	db.AutoMigrate(Members{}, Classes{}, Mentors{}, Admins{})
+	db.AutoMigrate(Members{}, Classes{})
 
 	log.Println("FINISHING AUTO MIGRATE ")
 }
