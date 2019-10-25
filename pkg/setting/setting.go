@@ -2,6 +2,7 @@ package setting
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"github.com/go-ini/ini"
@@ -109,6 +110,17 @@ func Setup() {
 	mapTo("smtp", SMTPSetting)
 	mapTo("mongodb", MongoDBSetting)
 	mapTo("redisdb", RedisDBSetting)
+
+	if os.Getenv("APP_RUN_MODE") == "release" {
+		DatabaseSetting.User = os.Getenv("DB_USER")
+		DatabaseSetting.Password = os.Getenv("DB_PASSWORD")
+		DatabaseSetting.Host = os.Getenv("DB_HOST")
+		DatabaseSetting.Port = os.Getenv("DB_PORT")
+		DatabaseSetting.Name = os.Getenv("DB_NAME")
+
+		RedisDBSetting.Host = os.Getenv("RD_HOST")
+	}
+
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
 	ServerSetting.WriteTimeout = ServerSetting.ReadTimeout * time.Second
 	// fmt.Println("Config Setup is Ready...")
