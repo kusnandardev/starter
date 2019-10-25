@@ -20,6 +20,7 @@ func InitRouter() *gin.Engine {
 	r.Use(cors.Default())
 	gin.SetMode(setting.ServerSetting.RunMode)
 
+	r.GET("/", v1.HealthCheck)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.POST("/api/auth/login", v1.Login)
 	r.POST("/api/auth/forgot", v1.Forgot)
