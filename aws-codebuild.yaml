@@ -18,7 +18,7 @@ phases:
       - export IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION
       - export REVISION_ID=$CODEBUILD_RESOLVED_SOURCE_VERSION
       - export BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-      - docker build -f ./core/Dockerfile -t $IMAGE_REPO_NAME:$IMAGE_TAG --build-arg revisionID=$REVISION_ID --build-arg buildTimestamp=$BUILD_TIMESTAMP .
+      - docker build -f ./Dockerfile -t $IMAGE_REPO_NAME:$IMAGE_TAG --build-arg revisionID=$REVISION_ID --build-arg buildTimestamp=$BUILD_TIMESTAMP .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
   post_build:
