@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"kusnandartoni/starter/pkg/logging"
 	"kusnandartoni/starter/pkg/setting"
 	"kusnandartoni/starter/pkg/util"
 	"net/http"
@@ -12,19 +13,25 @@ import (
 // JWT :
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var code int
-		var data interface{}
+		var (
+			logger = logging.Logger{UUID: "SYS"}
+			data   interface{}
+			code   = http.StatusOK
+			msg    = ""
+			token  = c.Request.Header.Get("Authorization")
+		)
 
-		code = http.StatusOK
-		msg := ""
-		token := c.Request.Header.Get("Authorization")
+		data = map[string]string{
+			"token": token,
+		}
+
 		if token == "" {
 			code = http.StatusNetworkAuthenticationRequired
 			msg = "Auth Token Required"
 		} else {
 			claims, err := util.ParseToken(token)
-			code = http.StatusUnauthorized
 			if err != nil {
+				code = http.StatusUnauthorized
 				switch err.(*jwt.ValidationError).Errors {
 				case jwt.ValidationErrorExpired:
 					msg = "Token Expired"
@@ -34,6 +41,7 @@ func JWT() gin.HandlerFunc {
 			} else {
 				valid := claims.VerifyIssuer(setting.AppSetting.Issuer, true)
 				if !valid {
+					code = http.StatusUnauthorized
 					msg = "Issuer is not valid"
 				}
 				c.Set("claims", claims)
@@ -41,12 +49,14 @@ func JWT() gin.HandlerFunc {
 		}
 
 		if code != http.StatusOK {
-			c.JSON(code, gin.H{
+			resp := gin.H{
 				"code": code,
 				"msg":  msg,
 				"data": data,
-			})
+			}
+			c.JSON(code, resp)
 
+			logger.Error(util.Stringify(resp))
 			c.Abort()
 			return
 		}

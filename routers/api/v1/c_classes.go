@@ -42,7 +42,7 @@ func GetClasses(c *gin.Context) {
 		PageSize: setting.AppSetting.PageSize,
 	}
 
-	logger.Info(classesService)
+	logger.Info(util.Stringify(classesService))
 	classes, err := classesService.GetAll()
 	if err != nil {
 		logger.Error(appG.Response(http.StatusInternalServerError, fmt.Sprintf("%v", err), nil))
@@ -87,7 +87,7 @@ func AddClass(c *gin.Context) {
 	)
 
 	httpCode, errMsg := app.BindAndValid(c, &form)
-	logger.Info(form)
+	logger.Info(util.Stringify(form))
 
 	if httpCode != 200 {
 		logger.Error(appG.Response(httpCode, errMsg, nil))
@@ -144,7 +144,7 @@ func EditClass(c *gin.Context) {
 	}
 
 	httpCode, errMsg := app.BindAndValid(c, &form)
-	logger.Info(form)
+	logger.Info(util.Stringify(form))
 	if httpCode != 200 {
 		logger.Error(appG.Response(httpCode, errMsg, nil))
 		return

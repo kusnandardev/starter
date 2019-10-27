@@ -1,6 +1,8 @@
 package app
 
 import (
+	"kusnandartoni/starter/pkg/util"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,5 +26,5 @@ func (g *Gin) Response(httpCode int, errMsg string, data interface{}) interface{
 		Data: data,
 	}
 	g.C.JSON(httpCode, response)
-	return response
+	return string(util.Stringify(response))
 }

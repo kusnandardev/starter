@@ -24,3 +24,16 @@
 - semua yang berhubungan dengan query diletakan di `model`
 - data dari model dimanipulasi di `service`
 - handler untuk request/respons diletakan di `router` 
+- utamakan deklarasi variabel menggunakan var dibagian atas tiap fungsi
+  <pre>
+   func Contoh() {\
+    var(  
+      num      int  
+      text     string  
+      numasgn  = 0  
+      textasgn = ""
+    )  
+    ...
+    ...
+    ...
+   }</pre>

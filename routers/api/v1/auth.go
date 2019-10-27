@@ -40,7 +40,7 @@ func Register(c *gin.Context) {
 	hashedPwd, err := util.Hash(form.Password)
 
 	form.Password = hashedPwd
-	logger.Info(form)
+	logger.Info(util.Stringify(form))
 
 	if httpCode != 200 {
 		logger.Error(appG.Response(httpCode, errMsg, nil))
@@ -90,7 +90,10 @@ func Login(c *gin.Context) {
 	)
 
 	httpCode, errMsg := app.BindAndValid(c, &form)
-	// hashedPwd, _ := util.Hash(form.Password)
+	hashedPwd, _ := util.Hash(form.Password)
+	formLog := form
+	formLog.Password = hashedPwd
+	logger.Info(util.Stringify(formLog))
 
 	if httpCode != 200 {
 		logger.Error(appG.Response(httpCode, errMsg, nil))
@@ -165,7 +168,7 @@ func Forgot(c *gin.Context) {
 	)
 
 	httpCode, errMsg := app.BindAndValid(c, &form)
-	logger.Info(form)
+	logger.Info(util.Stringify(form))
 	if httpCode != 200 {
 		logger.Error(appG.Response(httpCode, errMsg, nil))
 		return
@@ -215,7 +218,7 @@ func Reset(c *gin.Context) {
 	)
 
 	httpCode, errMsg := app.BindAndValid(c, &form)
-	logger.Info(form)
+	logger.Info(util.Stringify(form))
 	if httpCode != 200 {
 		logger.Error(appG.Response(httpCode, errMsg, nil))
 		return
