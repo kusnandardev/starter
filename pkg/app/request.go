@@ -1,8 +1,8 @@
 package app
 
 import (
-	"kusnandartoni/starter/pkg/util"
 	"fmt"
+	"kusnandartoni/starter/pkg/util"
 
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
@@ -25,9 +25,8 @@ func GetClaims(c *gin.Context) util.Claims {
 	claims, exist := c.Get("claims")
 
 	mapstructure.Decode(claims, &clm)
-	clm.UUID = clm.Id
 	if exist {
-		fmt.Println(clm)
+		clm.UUID = clm.Id
 	}
 	return clm
 }
