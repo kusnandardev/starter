@@ -1,66 +1,56 @@
 package svcmail
 
 import (
+	"fmt"
+	"io/ioutil"
+	"strings"
+
 	"kusnandartoni/starter/pkg/mail"
 	"kusnandartoni/starter/pkg/util"
 	"kusnandartoni/starter/redisdb"
-	"fmt"
-	"io/ioutil"
 )
 
-// ForgotPassword :
-type ForgotPassword struct {
-	Email     string
-	UserName  string
-	ResetLink string
+// Forgot :
+type Forgot struct {
+	Email      string `json:"email"`
+	Name       string `json:"name"`
+	ButtonLink string `json:"button_link"`
 }
 
 // Store :
-func (f *ForgotPassword) Store() error {
+func (f *Forgot) Store() error {
 	return redisdb.StoreForgot(f)
 }
 
 // Send :
-func (f *ForgotPassword) Send() {
-	h := mail.Hermes{Product: getDefaultProduct()}
-	h.Theme = new(mail.Default)
-	generateEmails(h, getForgetBody(f), "Forgot")
-	htmlBytes, err := ioutil.ReadFile(fmt.Sprintf("runtime/mail/%v/%v.%v.html", h.Theme.Name(), h.Theme.Name(), "Forgot"))
+func (f *Forgot) Send() error {
+	subjectEmail := "Permintaan Pergantian Password"
+	fileName := fmt.Sprintf("Forgot-%s", strings.ReplaceAll(f.Email, "@", "."))
+	filePath := fmt.Sprintf("%s/%s", "runtime/mail", fileName)
+
+	h := mail.Mail{MailType: "forgot"}
+	generateEmailTemplate(h, getForgotBody(f), fileName)
+
+	htmlBytes, err := ioutil.ReadFile(filePath + ".html")
 	if err != nil {
-		panic(err)
+		return err
 	}
-	txtBytes, err := ioutil.ReadFile(fmt.Sprintf("runtime/mail/%v/%v.%v.txt", h.Theme.Name(), h.Theme.Name(), "Forgot"))
+	txtBytes, err := ioutil.ReadFile(filePath + ".txt")
 	if err != nil {
-		panic(err)
+		return err
 	}
-	err = util.SendMail(f.Email, "Request Reset Password", string(htmlBytes), string(txtBytes))
+	err = util.SendMail(f.Email, subjectEmail, string(htmlBytes), string(txtBytes))
 	if err != nil {
-		panic(err)
+		return err
 	}
+	return nil
 }
 
-func getForgetBody(f *ForgotPassword) mail.Email {
-	return mail.Email{
-		Body: mail.Body{
-			Name: f.UserName,
-			Intros: []string{
-				"You have received this email because a password reset request for starter account was received.",
-			},
-			Actions: []mail.Action{
-				{
-					Instructions: "Click the button below to reset your password:",
-					Button: mail.Button{
-						Color:     "#FFA500",
-						TextColor: "#FFFFFF",
-						Text:      "Reset your password",
-						Link:      f.ResetLink,
-					},
-				},
-			},
-			Outros: []string{
-				"If you did not request a password reset, no further action is required on your part.",
-			},
-			Signature: "Warm Regards,",
+func getForgotBody(f *Forgot) mail.Format {
+	return mail.Format{
+		Forgot: mail.Forgot{
+			Name:       f.Name,
+			ButtonLink: f.ButtonLink,
 		},
 	}
 }

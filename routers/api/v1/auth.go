@@ -54,12 +54,12 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	mailService := svcmail.Verify{
-		Email:      form.Email,
-		UserName:   fmt.Sprintf("%s", form.FullName),
-		VerifyLink: fmt.Sprintf("%s/api/auth/verify?token=%s", setting.AppSetting.PrefixURL, util.GetEmailToken(form.Email)),
-	}
-	err = mailService.Store()
+	// mailService := svcmail.Verify{
+	// 	Email:      form.Email,
+	// 	UserName:   fmt.Sprintf("%s", form.FullName),
+	// 	VerifyLink: fmt.Sprintf("%s/api/auth/verify?token=%s", setting.AppSetting.PrefixURL, util.GetEmailToken(form.Email)),
+	// }
+	// err = mailService.Store()
 	if err != nil {
 		logger.Error(appG.Response(http.StatusInternalServerError, fmt.Sprintf("%v", err), nil))
 		return
@@ -180,10 +180,10 @@ func Forgot(c *gin.Context) {
 		return
 	}
 
-	mailService := svcmail.ForgotPassword{
-		UserName: name,
-		Email:    form.Email,
-		ResetLink: fmt.Sprintf("%s/api/auth/reset?token=%s",
+	mailService := svcmail.Forgot{
+		Name:  name,
+		Email: form.Email,
+		ButtonLink: fmt.Sprintf("%s/api/auth/reset?token=%s",
 			setting.AppSetting.PrefixURL,
 			util.GetEmailToken(form.Email)),
 	}

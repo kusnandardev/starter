@@ -1,15 +1,18 @@
 package main
 
 import (
+	"fmt"
 	"kusnandartoni/starter/models"
 	"kusnandartoni/starter/pkg/logging"
+	"kusnandartoni/starter/pkg/pool"
 	"kusnandartoni/starter/pkg/setting"
 	"kusnandartoni/starter/redisdb"
 	"kusnandartoni/starter/routers"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/jasonlvhit/gocron"
 )
 
 func init() {
@@ -49,6 +52,47 @@ func main() {
 	}
 
 	logging.Info("0", "start http server listening "+endPoint)
-
+	go runCrond()
 	server.ListenAndServe()
+
+}
+
+func runCrond() {
+	gocron.Every(10).Seconds().Do(sendMail)
+	<-gocron.Start()
+}
+
+func sendMail() {
+	var data []string
+	key := "starter_email"
+
+	tStart := time.Now()
+	log.Printf("Starting Application at %s\n", tStart.Format("2006-01-02 15:04:05"))
+
+	data, err := redisdb.GetList(key)
+	if err != nil {
+		log.Fatal(err)
+	}
+	dataLen := len(data)
+	if dataLen > 100 {
+		data = data[0:100]
+	}
+	log.Println(data, "len: ", len(data))
+	if len(data) > 0 {
+		err = redisdb.RemoveList(key, data)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	// wg.Add(len(data))
+	collector := pool.StartDispatcher(5)
+	for i, job := range data {
+		collector.Work <- pool.Work{Job: job, ID: i}
+	}
+
+	// wg.Wait()
+	tStop := time.Now()
+	diff := tStop.Sub(tStart)
+	log.Printf("Application Stoped at %s", tStop.Format("2006-01-02 15:04:05"))
+	log.Printf("Application running for %v \n\n", diff)
 }

@@ -8,9 +8,9 @@ import (
 
 // Forgot :
 type Forgot struct {
-	Email     string `json:"email"`
-	UserName  string `json:"name"`
-	ResetLink string `json:"reset_link"`
+	Email      string `json:"email"`
+	Name       string `json:"name"`
+	ButtonLink string `json:"button_link"`
 }
 
 // StoreForgot :
@@ -22,12 +22,17 @@ func StoreForgot(data interface{}) error {
 		return err
 	}
 
-	mForgot := map[string]interface{}{
-		"email_type": "forgot",
-		"data":       forgot,
+	bForgot, err := json.Marshal(forgot)
+	if err != nil {
+		return err
 	}
 
-	dForgot, err := json.Marshal(mForgot)
+	mForgot := map[string]interface{}{
+		"email_type": "forgot",
+		"data":       string(bForgot),
+	}
+
+	dForgot, _ := json.Marshal(mForgot)
 	if err != nil {
 		return err
 	}
