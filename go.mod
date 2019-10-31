@@ -3,6 +3,7 @@ module kusnandartoni/starter
 go 1.12
 
 require (
+	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.20.0+incompatible
 	github.com/Unknwon/com v0.0.0-20190321035513-0fed4efef755
@@ -15,7 +16,8 @@ require (
 	github.com/go-gomail/gomail v0.0.0-20160411212932-81ebce5c23df
 	github.com/go-ini/ini v1.42.0
 	github.com/go-redis/redis v6.15.5+incompatible
-	github.com/hitoni/sendmail-go v0.0.0-20190730044348-e546178c5de3
+	github.com/google/uuid v1.1.1 // indirect
+	github.com/huandu/xstrings v1.2.0 // indirect
 	github.com/imdario/mergo v0.3.7
 	github.com/jasonlvhit/gocron v0.0.0-20191021204008-47e27a9e0dc7
 	github.com/jaytaylor/html2text v0.0.0-20190408195923-01ec452cbe43
@@ -24,7 +26,10 @@ require (
 	github.com/mattn/go-runewidth v0.0.5 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.2
 	github.com/mitchellh/mapstructure v1.1.2
+	github.com/olekukonko/tablewriter v0.0.1 // indirect
 	github.com/russross/blackfriday/v2 v2.0.1
+	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
+	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	github.com/swaggo/gin-swagger v1.1.0
 	github.com/swaggo/swag v1.5.0
 	github.com/tidwall/pretty v1.0.0 // indirect
