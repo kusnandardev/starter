@@ -16,13 +16,13 @@ var db *gorm.DB
 
 // Base :
 type Base struct {
-	ID         uuid.UUID `json:"id" gorm:"type:uuid;primary_key;"`
-	CreatedOn  int       `json:"created_on,omitempty"`
-	CreatedBy  uuid.UUID `json:"created_by,omitempty" gorm:"DEFAULT:NULL"`
-	ModifiedOn int       `json:"modified_on,omitempty"`
-	ModifiedBy uuid.UUID `json:"modified_by,omitempty" gorm:"DEFAULT:NULL"`
-	DeletedOn  int       `json:"deleted_on,omitempty"`
-	DeletedBy  uuid.UUID `json:"deleted_by,omitempty" gorm:"DEFAULT:NULL"`
+	ID         int64  `json:"id" gorm:"type:uuid;primary_key;"`
+	CreatedOn  int64  `json:"created_on,omitempty"`
+	CreatedBy  string `json:"created_by,omitempty" gorm:"DEFAULT:NULL"`
+	ModifiedOn int64  `json:"modified_on,omitempty"`
+	ModifiedBy string `json:"modified_by,omitempty" gorm:"DEFAULT:NULL"`
+	DeletedOn  int64  `json:"deleted_on,omitempty"`
+	DeletedBy  string `json:"deleted_by,omitempty" gorm:"DEFAULT:NULL"`
 }
 
 // BeforeCreate will set a UUID rather than numeric ID.

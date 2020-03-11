@@ -8,7 +8,7 @@ import (
 
 // Classes :
 type Classes struct {
-	ID int `json:"id,omitempty" structs:"id,omitempty"`
+	ID int64 `json:"id,omitempty" structs:"id,omitempty"`
 
 	ImageURL    string `json:"image_url,omitempty" structs:"image_url,omitempty"`
 	Name        string `json:"name,omitempty" structs:"name,omitempty"`

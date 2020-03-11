@@ -5,7 +5,6 @@ import (
 	"kusnandartoni/starter/services/svcmembers"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/mitchellh/mapstructure"
 )
@@ -26,7 +25,7 @@ func registerMember(form interface{}) (int, string) {
 		return http.StatusUnprocessableEntity, fmt.Sprintf("%v", err)
 	}
 
-	if len(member.ID) > 0 {
+	if member.ID > 0 {
 		return http.StatusUnprocessableEntity, "Email already exist"
 	}
 
@@ -37,7 +36,7 @@ func registerMember(form interface{}) (int, string) {
 	return 0, ""
 }
 
-func loginMember(form interface{}) (int, string, uuid.UUID) {
+func loginMember(form interface{}) (int, string, int64) {
 	var (
 		err            error
 		membersService svcmembers.Members
@@ -45,16 +44,16 @@ func loginMember(form interface{}) (int, string, uuid.UUID) {
 
 	err = mapstructure.Decode(form, &membersService)
 	if err != nil {
-		return http.StatusInternalServerError, fmt.Sprintf("%v", err), uuid.Nil
+		return http.StatusInternalServerError, fmt.Sprintf("%v", err), 0
 	}
 
 	member, err := membersService.Identify()
 	if err != nil {
-		return http.StatusUnprocessableEntity, fmt.Sprintf("%v", err), uuid.Nil
+		return http.StatusUnprocessableEntity, fmt.Sprintf("%v", err), 0
 	}
 
 	if !member.Verified {
-		return http.StatusUnprocessableEntity, fmt.Sprintf("Please Verify your account berfore login"), uuid.Nil
+		return http.StatusUnprocessableEntity, fmt.Sprintf("Please Verify your account berfore login"), 0
 	}
 	return 0, "", member.ID
 }

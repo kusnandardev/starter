@@ -29,11 +29,11 @@ func GetClasses(c *gin.Context) {
 		logger = logging.Logger{}
 		err    = mapstructure.Decode(app.GetClaims(c), &logger)
 		appG   = app.Gin{C: c}
-		id     = -1
+		id     = int64(-1)
 	)
 
 	if arg := c.Query("id"); arg != "" {
-		id = com.StrTo(arg).MustInt()
+		id = int64(com.StrTo(arg).MustInt())
 	}
 
 	classesService := svcclasses.Classes{
@@ -131,7 +131,7 @@ func EditClass(c *gin.Context) {
 		logger         = logging.Logger{}
 		err            = mapstructure.Decode(app.GetClaims(c), &logger)
 		appG           = app.Gin{C: c}
-		id             = com.StrTo(c.Param("id")).MustInt()
+		id             = int64(com.StrTo(c.Param("id")).MustInt())
 		form           EditClassForm
 		classesService svcclasses.Classes
 		valid          validation.Validation
@@ -185,7 +185,7 @@ func DeleteClass(c *gin.Context) {
 		logger         = logging.Logger{}
 		err            = mapstructure.Decode(app.GetClaims(c), &logger)
 		appG           = app.Gin{C: c}
-		id             = com.StrTo(c.Param("id")).MustInt()
+		id             = int64(com.StrTo(c.Param("id")).MustInt())
 		valid          validation.Validation
 		classesService svcclasses.Classes
 	)

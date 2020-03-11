@@ -18,14 +18,14 @@ type Classes struct {
 }
 
 // ExistClassByID :
-func ExistClassByID(id int) (bool, error) {
+func ExistClassByID(id int64) (bool, error) {
 	var class Classes
 	err := db.Select("id").Where("id = ? AND deleted_on = ?", id, 0).First(&class).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return false, err
 	}
 
-	if len(class.ID) > 0 {
+	if class.ID > 0 {
 		return true, nil
 	}
 
@@ -80,7 +80,7 @@ func AddClass(data interface{}) error {
 }
 
 // EditClass :
-func EditClass(id int, data interface{}) error {
+func EditClass(id int64, data interface{}) error {
 	if err := db.Model(&Classes{}).Where("id = ? AND deleted_on = ?", id, 0).Updates(data).Error; err != nil {
 		return err
 	}
@@ -89,7 +89,7 @@ func EditClass(id int, data interface{}) error {
 }
 
 // DeleteClass :
-func DeleteClass(id int) error {
+func DeleteClass(id int64) error {
 	if err := db.Where("id = ?", id).Delete(&Classes{}).Error; err != nil {
 		return err
 	}

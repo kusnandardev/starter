@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/mitchellh/mapstructure"
 )
@@ -60,14 +59,14 @@ func ExistMembersByEmail(email string) (Members, error) {
 	if err != nil || err == gorm.ErrRecordNotFound {
 		return Members{}, err
 	}
-	if len(member.ID) > 0 {
+	if member.ID > 0 {
 		return member, nil
 	}
 	return Members{}, nil
 }
 
 // EditMembers :
-func EditMembers(id uuid.UUID, data interface{}) error {
+func EditMembers(id int64, data interface{}) error {
 	if err := db.Model(&Members{}).Where("id = ? and deleted_on = ?", id, 0).Updates(data).Error; err != nil {
 		return err
 	}
