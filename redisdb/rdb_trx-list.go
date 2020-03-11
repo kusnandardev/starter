@@ -32,3 +32,18 @@ func TurncateList(key string) error {
 	}
 	return nil
 }
+
+// AddSession :
+func AddSession(key string, val interface{}) error {
+	set := rdb.Set(key, val, 0)
+	if set != nil {
+		return nil
+	}
+	return nil
+}
+
+// GetSession :
+func GetSession(key string) interface{} {
+	value := rdb.Get(key).Val()
+	return value
+}

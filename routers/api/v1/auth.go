@@ -6,6 +6,7 @@ import (
 	"kusnandartoni/starter/pkg/logging"
 	"kusnandartoni/starter/pkg/setting"
 	"kusnandartoni/starter/pkg/util"
+	"kusnandartoni/starter/redisdb"
 	"kusnandartoni/starter/services/svcmail"
 	"net/http"
 
@@ -112,6 +113,8 @@ func Login(c *gin.Context) {
 		logger.Error(appG.Response(http.StatusInternalServerError, fmt.Sprintf("%v", err), nil))
 		return
 	}
+
+	redisdb.AddSession(token, ID)
 
 	logger.Info(appG.Response(http.StatusOK, "OK", map[string]interface{}{
 		"token": token,

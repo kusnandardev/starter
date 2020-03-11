@@ -4,6 +4,7 @@ import (
 	"kusnandartoni/starter/pkg/logging"
 	"kusnandartoni/starter/pkg/setting"
 	"kusnandartoni/starter/pkg/util"
+	"kusnandartoni/starter/redisdb"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
@@ -29,6 +30,11 @@ func JWT() gin.HandlerFunc {
 			code = http.StatusNetworkAuthenticationRequired
 			msg = "Auth Token Required"
 		} else {
+			existToken := redisdb.GetSession(token)
+			if existToken == "" {
+				code = http.StatusUnauthorized
+				msg = "Token Failed"
+			}
 			claims, err := util.ParseToken(token)
 			if err != nil {
 				code = http.StatusUnauthorized
