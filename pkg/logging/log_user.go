@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 )
 
 // Logger :
@@ -15,41 +16,61 @@ type Logger struct {
 
 // Debug :
 func (l *Logger) Debug(v ...interface{}) {
-	l.setUserLogPrefix(DEBUG)
+	var audit auditLog
+	l.setUserLogPrefix(&audit, DEBUG)
 	log.Println(v...)
 	logger.Println(v...)
+	audit.Message = fmt.Sprintf("%v", v)
+	go audit.saveAudit()
 }
 
 // Info :
 func (l *Logger) Info(v ...interface{}) {
-	l.setUserLogPrefix(INFO)
+	var audit auditLog
+	l.setUserLogPrefix(&audit, INFO)
 	log.Println(v...)
 	logger.Println(v...)
+	audit.Message = fmt.Sprintf("%v", v)
+	go audit.saveAudit()
 }
 
 // Warn :
 func (l *Logger) Warn(v ...interface{}) {
-	l.setUserLogPrefix(WARNING)
+	var audit auditLog
+	l.setUserLogPrefix(&audit, WARNING)
 	log.Println(v...)
 	logger.Println(v...)
+	audit.Message = fmt.Sprintf("%v", v)
+	go audit.saveAudit()
 }
 
 // Error :
 func (l *Logger) Error(v ...interface{}) {
-	l.setUserLogPrefix(ERROR)
+	var audit auditLog
+	l.setUserLogPrefix(&audit, ERROR)
 	log.Println(v...)
 	logger.Println(v...)
+	audit.Message = fmt.Sprintf("%v", v)
+	go audit.saveAudit()
 }
 
 // Fatal :
 func (l *Logger) Fatal(v ...interface{}) {
-	l.setUserLogPrefix(FATAL)
+	var audit auditLog
+	l.setUserLogPrefix(&audit, FATAL)
 	log.Println(v...)
 	logger.Fatalln(v...)
 }
 
-func (l *Logger) setUserLogPrefix(level Level) {
+func (l *Logger) setUserLogPrefix(audit *auditLog, level Level) {
+	t := time.Now()
 	function, file, line, ok := runtime.Caller(DefaultCallerDepth)
+	audit.Level = levelFlags[level]
+	audit.UUID = l.UUID
+	audit.FuncName = ""
+	audit.FileName = filepath.Base(file)
+	audit.Line = int64(line)
+	audit.Time = fmt.Sprintf("%s", t.Format("2006-01-02 15:04:05"))
 	if ok {
 		s := strings.Split(runtime.FuncForPC(function).Name(), ".")
 		_, fn := s[0], s[1]
@@ -58,6 +79,7 @@ func (l *Logger) setUserLogPrefix(level Level) {
 		eFunc = fn
 		eFile = filepath.Base(file)
 		eLine = line
+		audit.FuncName = fn
 	} else {
 		logPrefix = fmt.Sprintf("[%s]", levelFlags[level])
 	}

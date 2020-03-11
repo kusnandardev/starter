@@ -51,7 +51,7 @@ func main() {
 		MaxHeaderBytes: maxHeaderBytes,
 	}
 
-	logging.Info("0", "start http server listening "+endPoint)
+	logging.Info("start http server listening " + endPoint)
 	go runCrond()
 	server.ListenAndServe()
 

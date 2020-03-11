@@ -58,42 +58,63 @@ func Setup() {
 }
 
 // Debug :
-func Debug(user string, v ...interface{}) {
-	setPrefix(DEBUG)
+func Debug(v ...interface{}) {
+	var audit auditLog
+	setPrefix(&audit, DEBUG)
 	log.Println(v...)
 	logger.Println(v...)
+	audit.Message = fmt.Sprintf("%v", v)
+	go audit.saveAudit()
 }
 
 // Info :
-func Info(user string, v ...interface{}) {
-	setPrefix(INFO)
+func Info(v ...interface{}) {
+	var audit auditLog
+	setPrefix(&audit, INFO)
 	log.Println(v...)
 	logger.Println(v...)
+	audit.Message = fmt.Sprintf("%v", v)
+	go audit.saveAudit()
 }
 
 // Warn :
-func Warn(user string, v ...interface{}) {
-	setPrefix(WARNING)
+func Warn(v ...interface{}) {
+	var audit auditLog
+	setPrefix(&audit, WARNING)
 	log.Println(v...)
 	logger.Println(v...)
+	audit.Message = fmt.Sprintf("%v", v)
+	go audit.saveAudit()
 }
 
 // Error :
-func Error(user string, v ...interface{}) {
-	setPrefix(ERROR)
+func Error(v ...interface{}) {
+	var audit auditLog
+	setPrefix(&audit, ERROR)
 	log.Println(v...)
 	logger.Println(v...)
+	audit.Message = fmt.Sprintf("%v", v)
+	go audit.saveAudit()
 }
 
 // Fatal :
-func Fatal(user string, v ...interface{}) {
-	setPrefix(FATAL)
+func Fatal(v ...interface{}) {
+	var audit auditLog
+	setPrefix(&audit, FATAL)
 	log.Println(v...)
 	logger.Fatalln(v...)
 }
 
-func setPrefix(level Level) {
+func setPrefix(audit *auditLog, level Level) {
+
+	t := time.Now()
 	function, file, line, ok := runtime.Caller(DefaultCallerDepth)
+	audit.Level = levelFlags[level]
+	audit.UUID = "SYS"
+	audit.FuncName = ""
+	audit.FileName = filepath.Base(file)
+	audit.Line = int64(line)
+	audit.Time = fmt.Sprintf("%s", t.Format("2006-01-02 15:04:05"))
 	if ok {
 		s := strings.Split(runtime.FuncForPC(function).Name(), ".")
 		_, fn := s[0], s[1]
@@ -102,6 +123,7 @@ func setPrefix(level Level) {
 		eFunc = fn
 		eFile = filepath.Base(file)
 		eLine = line
+		audit.FuncName = fn
 	} else {
 		logPrefix = fmt.Sprintf("[%s]", levelFlags[level])
 	}

@@ -1,43 +1,33 @@
-package models
+package logging
 
 import (
 	"fmt"
-	"kusnandartoni/starter/pkg/logging"
 	"kusnandartoni/starter/pkg/setting"
 	"log"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres" // add database driver bridge
 )
 
 var db *gorm.DB
 
-// Base :
-type Base struct {
-	ID         int64  `json:"id" gorm:"type:uuid;primary_key;"`
-	CreatedOn  int64  `json:"created_on,omitempty"`
-	CreatedBy  string `json:"created_by,omitempty" gorm:"DEFAULT:NULL"`
-	ModifiedOn int64  `json:"modified_on,omitempty"`
-	ModifiedBy string `json:"modified_by,omitempty" gorm:"DEFAULT:NULL"`
-	DeletedOn  int64  `json:"deleted_on,omitempty"`
-	DeletedBy  string `json:"deleted_by,omitempty" gorm:"DEFAULT:NULL"`
+type auditLog struct {
+	ID        int64  `json:"id"`
+	CreatedOn int64  `json:"created_on"`
+	Level     string `json:"level"`
+	UUID      string `json:"uuid"`
+	FuncName  string `json:"func_name"`
+	FileName  string `json:"file_name"`
+	Line      int64  `json:"line"`
+	Time      string `json:"time"`
+	Message   string `json:"message"`
 }
 
-// BeforeCreate will set a UUID rather than numeric ID.
-func (base *Base) BeforeCreate(scope *gorm.Scope) error {
-	uuid, err := uuid.NewUUID()
-	if err != nil {
-		return err
-	}
-	return scope.SetColumn("ID", uuid)
-}
+func (a *auditLog) saveAudit() {
+	var (
+		err error
+	)
 
-// Setup :
-func Setup() {
-	now := time.Now()
-	var err error
 	connectionParams := fmt.Sprintf(
 		"user=%s password=%s dbname=%s sslmode=disable host=%s port=%s",
 		setting.DatabaseSetting.User,
@@ -47,11 +37,11 @@ func Setup() {
 		setting.DatabaseSetting.Port)
 
 	db, err = gorm.Open(setting.DatabaseSetting.Type, connectionParams)
+	defer db.Close()
 
 	if err != nil {
-		logging.Fatal("0", "models.Setup err: ", err)
+		log.Printf("%s", err)
 	}
-
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 		return setting.DatabaseSetting.TablePrefix + defaultTableName
 	}
@@ -64,23 +54,11 @@ func Setup() {
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 
-	go autoMigrate()
+	err = db.Create(&a).Error
+	if err != nil {
+		log.Printf("%s", err)
+	}
 
-	timeSpent := time.Since(now)
-	log.Printf("Config database is ready in %v", timeSpent)
-}
-
-func autoMigrate() {
-	// Add auto migrate bellow this line
-	log.Println("STARTING AUTO MIGRATE ")
-	db.AutoMigrate(Members{}, Classes{}, AuditLog{})
-
-	log.Println("FINISHING AUTO MIGRATE ")
-}
-
-// CloseDB :
-func CloseDB() {
-	defer db.Close()
 }
 
 // updateTimeStampForCreateCallback will set `CreatedOn`, `ModifiedOn` when creating
@@ -142,17 +120,4 @@ func addExtraSpaceIfExist(str string) string {
 		return " " + str
 	}
 	return ""
-}
-
-// AuditLog :
-type AuditLog struct {
-	ID        int64  `json:"id"`
-	CreatedOn int64  `json:"created_on"`
-	Level     string `json:"level"`
-	UUID      string `json:"uuid"`
-	FuncName  string `json:"func_name"`
-	FileName  string `json:"file_name"`
-	Line      int64  `json:"line"`
-	Time      string `json:"time"`
-	Message   string `json:"message"`
 }
