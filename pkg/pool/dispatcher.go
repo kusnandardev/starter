@@ -1,9 +1,5 @@
 package pool
 
-import (
-	"log"
-)
-
 // WorkerChannel :
 var WorkerChannel = make(chan chan Work)
 
@@ -22,7 +18,7 @@ func StartDispatcher(workerCount int) Collector {
 	end := make(chan bool)
 	collector := Collector{Work: input, End: end}
 
-	log.Printf("Starting Worker : %v", workerCount)
+	// log.Printf("Starting Worker : %v", workerCount)
 	for i < workerCount {
 		i++
 		worker := Worker{

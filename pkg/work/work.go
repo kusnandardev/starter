@@ -2,8 +2,10 @@ package work
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
+	"kusnandartoni/starter/pkg/logging"
 	"kusnandartoni/starter/redisdb"
 	"kusnandartoni/starter/services/svcmail"
 )
@@ -11,7 +13,10 @@ import (
 // DoWork :
 func DoWork(data string, id int) {
 	// defer wg.Done()
-	var emailData svcmail.EmailData
+	var (
+		emailData svcmail.EmailData
+		logger    = logging.Logger{UUID: "MAILER"}
+	)
 	to := ""
 	err := json.Unmarshal([]byte(data), &emailData)
 	if err != nil {
@@ -19,7 +24,7 @@ func DoWork(data string, id int) {
 		panic(err)
 	}
 
-	log.Printf("worker [%d] is sending [%s] email \n", id, emailData.EmailType)
+	logger.Debug(fmt.Sprintf("worker [%d] is sending [%s] email \n", id, emailData.EmailType))
 	// email process here
 	if emailData.EmailType == "forgot" {
 		var forgot svcmail.Forgot
@@ -138,7 +143,7 @@ func DoWork(data string, id int) {
 	// 	}
 	// }
 	//
-	log.Printf("worker [%d] sending to [%s] done... \n", id, to)
+	logger.Debug(fmt.Sprintf("worker [%d] sending to [%s] done... \n", id, to))
 	if err != nil {
 		redisdb.AddList("starter_email", data)
 	}
