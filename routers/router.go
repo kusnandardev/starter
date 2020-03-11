@@ -2,7 +2,6 @@ package routers
 
 import (
 	_ "kusnandartoni/starter/docs" //swager files
-	"kusnandartoni/starter/midleware/jwt"
 	"kusnandartoni/starter/pkg/setting"
 	v1 "kusnandartoni/starter/routers/api/v1"
 
@@ -31,7 +30,7 @@ func InitRouter() *gin.Engine {
 	apiV1 := r.Group("/api/v1")
 	{
 		class := apiV1.Group("/class")
-		class.Use(jwt.JWT())
+		// class.Use(jwt.JWT())
 		{
 			class.GET("", v1.GetClasses)
 			class.POST("", v1.AddClass)

@@ -6,11 +6,12 @@ import (
 	"kusnandartoni/starter/pkg/util"
 
 	"github.com/fatih/structs"
+	"github.com/google/uuid"
 )
 
 // Members :
 type Members struct {
-	ID       int
+	ID       uuid.UUID
 	Email    string `json:"email" structs:"email,omitempty"`
 	Password string `json:"password" structs:"password,omitempty"`
 	FullName string `json:"full_name" structs:"full_name,omitempty"`
@@ -68,7 +69,7 @@ func (m *Members) getMaps() map[string]interface{} {
 	maps := make(map[string]interface{})
 	maps["deleted_on"] = 0
 
-	if m.ID != -1 {
+	if len(m.ID) > 0 {
 		maps["id"] = m.ID
 	}
 	return maps

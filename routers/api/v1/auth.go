@@ -10,6 +10,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 // RegisterForm :
@@ -86,7 +87,7 @@ func Login(c *gin.Context) {
 		logger = logging.Logger{UUID: "0"}
 		appG   = app.Gin{C: c}
 		form   LoginForm
-		ID     int
+		ID     uuid.UUID
 	)
 
 	httpCode, errMsg := app.BindAndValid(c, &form)

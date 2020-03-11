@@ -16,7 +16,7 @@ require (
 	github.com/go-gomail/gomail v0.0.0-20160411212932-81ebce5c23df
 	github.com/go-ini/ini v1.42.0
 	github.com/go-redis/redis v6.15.5+incompatible
-	github.com/google/uuid v1.1.1 // indirect
+	github.com/google/uuid v1.1.1
 	github.com/huandu/xstrings v1.2.0 // indirect
 	github.com/imdario/mergo v0.3.7
 	github.com/jasonlvhit/gocron v0.0.0-20191021204008-47e27a9e0dc7

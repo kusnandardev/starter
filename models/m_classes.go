@@ -9,7 +9,7 @@ import (
 
 // Classes :
 type Classes struct {
-	Model
+	Base
 
 	ImageURL    string `json:"image_url"`
 	Name        string `json:"name"`
@@ -25,7 +25,7 @@ func ExistClassByID(id int) (bool, error) {
 		return false, err
 	}
 
-	if class.ID > 0 {
+	if len(class.ID) > 0 {
 		return true, nil
 	}
 

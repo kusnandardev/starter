@@ -1,12 +1,12 @@
 package util
 
 import (
-	"kusnandartoni/starter/pkg/setting"
 	"fmt"
-	"strconv"
+	"kusnandartoni/starter/pkg/setting"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 )
 
 var jwtSecret = []byte(setting.AppSetting.JwtSecret)
@@ -18,12 +18,12 @@ type Claims struct {
 }
 
 // GenerateToken :
-func GenerateToken(id int) (string, error) {
+func GenerateToken(id uuid.UUID) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(3 * time.Hour)
 
 	claims := Claims{}
-	claims.Id = strconv.Itoa(id)
+	claims.Id = id.String()
 	claims.ExpiresAt = expireTime.Unix()
 	claims.Issuer = setting.AppSetting.Issuer
 

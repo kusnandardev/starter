@@ -1,13 +1,14 @@
 package models
 
 import (
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/mitchellh/mapstructure"
 )
 
 // Members :
 type Members struct {
-	Model
+	Base
 
 	Email    string `json:"email" gorm:"type:varchar(100);unique_index"`
 	Password string `json:"password"`
@@ -59,14 +60,14 @@ func ExistMembersByEmail(email string) (Members, error) {
 	if err != nil || err == gorm.ErrRecordNotFound {
 		return Members{}, err
 	}
-	if member.ID > 0 {
+	if len(member.ID) > 0 {
 		return member, nil
 	}
 	return Members{}, nil
 }
 
 // EditMembers :
-func EditMembers(id int, data interface{}) error {
+func EditMembers(id uuid.UUID, data interface{}) error {
 	if err := db.Model(&Members{}).Where("id = ? and deleted_on = ?", id, 0).Updates(data).Error; err != nil {
 		return err
 	}
