@@ -170,7 +170,7 @@ func Login(c *gin.Context) {
 
 	logger.Info(appG.Response(http.StatusOK, "OK", map[string]interface{}{
 		"token": token,
-		// "member": res,
+		"me":    member,
 	}))
 }
 
