@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"encoding/base64"
 	"fmt"
 	"kusnandartoni/starter/pkg/app"
 	"kusnandartoni/starter/pkg/logging"
@@ -9,6 +10,7 @@ import (
 	"kusnandartoni/starter/redisdb"
 	"kusnandartoni/starter/services/svcmail"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -69,6 +71,57 @@ func Register(c *gin.Context) {
 	logger.Info(appG.Response(http.StatusOK, "OK", form))
 }
 
+// GetToken :
+func GetToken(c *gin.Context) {
+	type form struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+	var (
+		logger     = logging.Logger{UUID: "AUTH"}
+		appG       = app.Gin{C: c}
+		authHeader = c.Request.Header.Get("Authorization")
+		auth       = &form{}
+	)
+
+	logger.Info(authHeader)
+	authKey := strings.Split(authHeader, " ")
+	if len(authKey) != 2 {
+		logger.Debug("Basic auth can't be empty")
+		return
+	}
+	if authKey[0] != "Basic" {
+		logger.Error("Your basic auth is invalid")
+		return
+	}
+	data, _ := base64.StdEncoding.DecodeString(authKey[1])
+	decodedData := fmt.Sprintf("%q", data)
+	splitedData := strings.Split(decodedData[1:len(decodedData)-1], ":")
+	auth.Email = splitedData[0]
+	auth.Password = splitedData[1]
+
+	httpCode, errMsg, member := loginMember(auth)
+
+	if httpCode > 0 {
+		logger.Error(appG.Response(httpCode, errMsg, nil))
+		return
+	}
+
+	token, err := util.GenerateToken(member.ID, member.UUID)
+	if err != nil {
+		logger.Error(appG.Response(http.StatusInternalServerError, fmt.Sprintf("%v", err), nil))
+		return
+	}
+
+	redisdb.AddSession(token, member.ID)
+
+	logger.Info(appG.Response(http.StatusOK, "OK", map[string]interface{}{
+		"token": token,
+		"me":    member,
+	}))
+
+}
+
 // LoginForm :
 type LoginForm struct {
 	Email    string `valid:"Required"`
@@ -84,10 +137,9 @@ type LoginForm struct {
 // @Router /api/auth/login [post]
 func Login(c *gin.Context) {
 	var (
-		logger = logging.Logger{UUID: "0"}
+		logger = logging.Logger{UUID: "AUTH"}
 		appG   = app.Gin{C: c}
 		form   LoginForm
-		ID     int64
 	)
 
 	httpCode, errMsg := app.BindAndValid(c, &form)
@@ -101,20 +153,20 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	httpCode, errMsg, ID = loginMember(form)
+	httpCode, errMsg, member := loginMember(form)
 
 	if httpCode > 0 {
 		logger.Error(appG.Response(httpCode, errMsg, nil))
 		return
 	}
 
-	token, err := util.GenerateToken(ID)
+	token, err := util.GenerateToken(member.ID, member.UUID)
 	if err != nil {
 		logger.Error(appG.Response(http.StatusInternalServerError, fmt.Sprintf("%v", err), nil))
 		return
 	}
 
-	redisdb.AddSession(token, ID)
+	redisdb.AddSession(token, member.ID)
 
 	logger.Info(appG.Response(http.StatusOK, "OK", map[string]interface{}{
 		"token": token,

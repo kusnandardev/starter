@@ -7,7 +7,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres" // add database driver bridge
 )
@@ -16,22 +15,13 @@ var db *gorm.DB
 
 // Base :
 type Base struct {
-	ID         int64  `json:"id" gorm:"type:uuid;primary_key;"`
-	CreatedOn  int64  `json:"created_on,omitempty"`
-	CreatedBy  string `json:"created_by,omitempty" gorm:"DEFAULT:NULL"`
-	ModifiedOn int64  `json:"modified_on,omitempty"`
-	ModifiedBy string `json:"modified_by,omitempty" gorm:"DEFAULT:NULL"`
-	DeletedOn  int64  `json:"deleted_on,omitempty"`
-	DeletedBy  string `json:"deleted_by,omitempty" gorm:"DEFAULT:NULL"`
-}
-
-// BeforeCreate will set a UUID rather than numeric ID.
-func (base *Base) BeforeCreate(scope *gorm.Scope) error {
-	uuid, err := uuid.NewUUID()
-	if err != nil {
-		return err
-	}
-	return scope.SetColumn("ID", uuid)
+	ID         int64  `json:"id" gorm:"primary_key;"`
+	CreatedOn  int64  `json:"-"`
+	CreatedBy  string `json:"-" gorm:"DEFAULT:NULL"`
+	ModifiedOn int64  `json:"-"`
+	ModifiedBy string `json:"-" gorm:"DEFAULT:NULL"`
+	DeletedOn  int64  `json:"-"`
+	DeletedBy  string `json:"-" gorm:"DEFAULT:NULL"`
 }
 
 // Setup :

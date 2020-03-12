@@ -2,6 +2,7 @@ package v1
 
 import (
 	"fmt"
+	"kusnandartoni/starter/models"
 	"kusnandartoni/starter/services/svcmembers"
 	"net/http"
 
@@ -36,7 +37,7 @@ func registerMember(form interface{}) (int, string) {
 	return 0, ""
 }
 
-func loginMember(form interface{}) (int, string, int64) {
+func loginMember(form interface{}) (int, string, models.Members) {
 	var (
 		err            error
 		membersService svcmembers.Members
@@ -44,18 +45,18 @@ func loginMember(form interface{}) (int, string, int64) {
 
 	err = mapstructure.Decode(form, &membersService)
 	if err != nil {
-		return http.StatusInternalServerError, fmt.Sprintf("%v", err), 0
+		return http.StatusInternalServerError, fmt.Sprintf("%v", err), models.Members{}
 	}
 
 	member, err := membersService.Identify()
 	if err != nil {
-		return http.StatusUnprocessableEntity, fmt.Sprintf("%v", err), 0
+		return http.StatusUnprocessableEntity, fmt.Sprintf("%v", err), models.Members{}
 	}
 
 	if !member.Verified {
-		return http.StatusUnprocessableEntity, fmt.Sprintf("Please Verify your account berfore login"), 0
+		return http.StatusUnprocessableEntity, fmt.Sprintf("Please Verify your account berfore login"), models.Members{}
 	}
-	return 0, "", member.ID
+	return 0, "", member
 }
 
 func verifyMember(email string) (int, string) {

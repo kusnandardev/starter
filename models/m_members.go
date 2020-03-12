@@ -10,10 +10,11 @@ type Members struct {
 	Base
 
 	Email    string `json:"email" gorm:"type:varchar(100);unique_index"`
-	Password string `json:"password"`
+	Password string `json:"-"`
 	FullName string `json:"full_name"`
 	PhotoURL string `json:"photo_url"`
-	Verified bool   `json:"verified"`
+	Verified bool   `json:"-"`
+	UUID     string `json:"uuid"`
 }
 
 // GetMembers :

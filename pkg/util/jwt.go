@@ -17,11 +17,12 @@ type Claims struct {
 }
 
 // GenerateToken :
-func GenerateToken(id int64) (string, error) {
+func GenerateToken(id int64, uuid string) (string, error) {
 
 	claims := Claims{}
 	claims.Id = strconv.Itoa(int(id))
 	claims.Issuer = setting.AppSetting.Issuer
+	claims.UUID = uuid
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := tokenClaims.SignedString(jwtSecret)

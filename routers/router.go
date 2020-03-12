@@ -2,6 +2,7 @@ package routers
 
 import (
 	_ "kusnandartoni/starter/docs" //swager files
+	"kusnandartoni/starter/midleware/jwt"
 	"kusnandartoni/starter/pkg/setting"
 	v1 "kusnandartoni/starter/routers/api/v1"
 
@@ -22,6 +23,7 @@ func InitRouter() *gin.Engine {
 	r.GET("/", v1.HealthCheck)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.POST("/api/auth/login", v1.Login)
+	r.GET("/api/auth/get-token", v1.GetToken)
 	r.POST("/api/auth/forgot", v1.Forgot)
 	r.GET("/api/auth/verify", v1.Verify)
 	r.PUT("/api/auth/reset", v1.Reset)
@@ -30,7 +32,7 @@ func InitRouter() *gin.Engine {
 	apiV1 := r.Group("/api/v1")
 	{
 		class := apiV1.Group("/class")
-		// class.Use(jwt.JWT())
+		class.Use(jwt.JWT())
 		{
 			class.GET("", v1.GetClasses)
 			class.POST("", v1.AddClass)

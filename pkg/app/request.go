@@ -22,11 +22,7 @@ func MarkErrors(errors []*validation.Error) string {
 // GetClaims :
 func GetClaims(c *gin.Context) util.Claims {
 	var clm util.Claims
-	claims, exist := c.Get("claims")
-
+	claims, _ := c.Get("claims")
 	mapstructure.Decode(claims, &clm)
-	if exist {
-		clm.UUID = clm.Id
-	}
 	return clm
 }

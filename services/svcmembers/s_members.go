@@ -16,6 +16,7 @@ type Members struct {
 	FullName string `json:"full_name" structs:"full_name,omitempty"`
 	PhotoURL string `json:"photo_url" structs:"photo_url,omitempty"`
 	Verified bool   `json:"verified" structs:"verified,omitempty"`
+	UUID     string `json:"uuid" structs:"uuid,omitempty"`
 
 	PageNum  int `json:"page_num,omitempty"`
 	PageSize int `json:"page_size,omitempty"`

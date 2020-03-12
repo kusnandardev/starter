@@ -6,6 +6,7 @@ import (
 	"kusnandartoni/starter/pkg/util"
 	"kusnandartoni/starter/redisdb"
 	"net/http"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -15,19 +16,31 @@ import (
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var (
-			logger = logging.Logger{UUID: "SYS"}
-			data   interface{}
-			code   = http.StatusOK
-			msg    = ""
-			token  = c.Request.Header.Get("Authorization")
+			logger        = logging.Logger{UUID: "SYS"}
+			data          interface{}
+			code          = http.StatusOK
+			msg           = ""
+			token         = ""
+			authorization = c.Request.Header.Get("Authorization")
 		)
+
+		splitedAuthorization := strings.Split(authorization, " ")
+		if len(splitedAuthorization) != 2 {
+			code = http.StatusUnauthorized
+			msg = "Yout Auth Token is Invalid"
+		}
+		if splitedAuthorization[0] != "Bearer" {
+			logger.Error("Your basic auth is invalid")
+			return
+		}
+		token = splitedAuthorization[1]
 
 		data = map[string]string{
 			"token": token,
 		}
 
 		if token == "" {
-			code = http.StatusNetworkAuthenticationRequired
+			code = http.StatusUnauthorized
 			msg = "Auth Token Required"
 		} else {
 			existToken := redisdb.GetSession(token)
