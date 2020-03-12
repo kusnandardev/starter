@@ -8,7 +8,10 @@ import (
 
 // Classes :
 type Classes struct {
-	ID int64 `json:"id,omitempty" structs:"id,omitempty"`
+	ID         int64  `json:"id,omitempty" structs:"id,omitempty"`
+	CreatedBy  string `json:"created_by,omitempty" structs:"created_by,omitempty"`
+	ModifiedBy string `json:"modified_by,omitempty" structs:"modified_by,omitempty"`
+	DeletedBy  string `json:"deleted_by,omitempty" structs:"deleted_by,omitempty"`
 
 	ImageURL    string `json:"image_url,omitempty" structs:"image_url,omitempty"`
 	Name        string `json:"name,omitempty" structs:"name,omitempty"`
@@ -52,7 +55,7 @@ func (s *Classes) Edit() error {
 
 // Delete :
 func (s *Classes) Delete() error {
-	return models.DeleteClass(s.ID)
+	return models.DeleteClass(s.ID, s.DeletedBy)
 }
 
 func (s *Classes) getMaps() map[string]interface{} {

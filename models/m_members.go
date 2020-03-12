@@ -7,7 +7,7 @@ import (
 
 // Members :
 type Members struct {
-	Base
+	Base `mapstructure:",squash"`
 
 	Email    string `json:"email" gorm:"type:varchar(100);unique_index"`
 	Password string `json:"-"`
@@ -24,12 +24,12 @@ func GetMembers(pageNum, pageSize int, maps interface{}) ([]Members, error) {
 		err     error
 	)
 
+	dbMember := db.Where(maps)
 	if pageSize > 0 && pageNum >= 0 {
-		err = db.Where(maps).Offset(pageNum).Limit(pageSize).Find(&members).Error
-	} else {
-		err = db.Where(maps).Find(&members).Error
+		dbMember = dbMember.Offset(pageNum).Limit(pageSize)
 	}
 
+	err = db.Order("id desc").Find(&members).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}

@@ -9,7 +9,7 @@ import (
 
 // Classes :
 type Classes struct {
-	Base
+	Base `mapstructure:",squash"`
 
 	ImageURL    string `json:"image_url"`
 	Name        string `json:"name"`
@@ -49,11 +49,13 @@ func GetClasses(pageNum, pageSize int, maps interface{}) ([]Classes, error) {
 		err   error
 	)
 
+	dbClass := db.Where(maps)
+
 	if pageSize > 0 && pageNum >= 0 {
-		err = db.Where(maps).Offset(pageNum).Limit(pageSize).Find(&class).Error
-	} else {
-		err = db.Where(maps).Find(&class).Error
+		dbClass = dbClass.Offset(pageNum).Limit(pageSize)
 	}
+
+	err = dbClass.Order("id desc").Find(&class).Error
 
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
@@ -64,13 +66,14 @@ func GetClasses(pageNum, pageSize int, maps interface{}) ([]Classes, error) {
 
 // AddClass :
 func AddClass(data interface{}) error {
-
+	fmt.Println(data)
 	var class Classes
 	err := mapstructure.Decode(data, &class)
 	if err != nil {
 		return err
 	}
 
+	fmt.Println(class)
 	err = db.Create(&class).Error
 	if err != nil {
 		return err
@@ -89,7 +92,10 @@ func EditClass(id int64, data interface{}) error {
 }
 
 // DeleteClass :
-func DeleteClass(id int64) error {
+func DeleteClass(id int64, uuid string) error {
+	if err := db.Model(&Classes{}).Where("id = ? AND deleted_on = ?", id, 0).Updates(map[string]interface{}{"deleted_by": uuid}).Error; err != nil {
+		return err
+	}
 	if err := db.Where("id = ?", id).Delete(&Classes{}).Error; err != nil {
 		return err
 	}

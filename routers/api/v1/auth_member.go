@@ -6,6 +6,8 @@ import (
 	"kusnandartoni/starter/services/svcmembers"
 	"net/http"
 
+	"github.com/segmentio/ksuid"
+
 	"github.com/jinzhu/gorm"
 	"github.com/mitchellh/mapstructure"
 )
@@ -30,6 +32,10 @@ func registerMember(form interface{}) (int, string) {
 		return http.StatusUnprocessableEntity, "Email already exist"
 	}
 
+	uuid := ksuid.New()
+	membersService.UUID = uuid.String()
+	membersService.CreatedBy = uuid.String()
+	membersService.ModifiedBy = uuid.String()
 	err = membersService.Add()
 	if err != nil {
 		return http.StatusInternalServerError, fmt.Sprintf("%v", err)

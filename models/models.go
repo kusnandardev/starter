@@ -17,11 +17,11 @@ var db *gorm.DB
 type Base struct {
 	ID         int64  `json:"id" gorm:"primary_key;"`
 	CreatedOn  int64  `json:"-"`
-	CreatedBy  string `json:"-" gorm:"DEFAULT:NULL"`
+	CreatedBy  string `json:"-"`
 	ModifiedOn int64  `json:"-"`
-	ModifiedBy string `json:"-" gorm:"DEFAULT:NULL"`
+	ModifiedBy string `json:"-"`
 	DeletedOn  int64  `json:"-"`
-	DeletedBy  string `json:"-" gorm:"DEFAULT:NULL"`
+	DeletedBy  string `json:"-"`
 }
 
 // Setup :

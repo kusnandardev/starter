@@ -99,14 +99,15 @@ func AddClass(c *gin.Context) {
 		logger.Error(appG.Response(http.StatusInternalServerError, fmt.Sprintf("%v", err), nil))
 		return
 	}
-
+	classesService.CreatedBy = logger.UUID
+	classesService.ModifiedBy = logger.UUID
 	err = classesService.Add()
 	if err != nil {
 		logger.Error(appG.Response(http.StatusInternalServerError, fmt.Sprintf("%v", err), nil))
 		return
 	}
 
-	logger.Info(appG.Response(http.StatusOK, "Data berhasil ditambah", form))
+	logger.Info(appG.Response(http.StatusOK, "Data berhasil ditambah", classesService))
 }
 
 // EditClassForm :
@@ -163,6 +164,7 @@ func EditClass(c *gin.Context) {
 		return
 	}
 
+	classesService.ModifiedBy = logger.UUID
 	err = classesService.Edit()
 	if err != nil {
 		logger.Error(appG.Response(http.StatusInternalServerError, fmt.Sprintf("%v", err), nil))
@@ -204,6 +206,7 @@ func DeleteClass(c *gin.Context) {
 		return
 	}
 
+	classesService.DeletedBy = logger.UUID
 	err = classesService.Delete()
 	if err != nil {
 		logger.Error(appG.Response(http.StatusInternalServerError, fmt.Sprintf("%v", err), nil))

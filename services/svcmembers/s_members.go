@@ -10,7 +10,11 @@ import (
 
 // Members :
 type Members struct {
-	ID       int64
+	ID         int64  `json:"id,omitempty" structs:"id,omitempty"`
+	CreatedBy  string `json:"created_by,omitempty" structs:"created_by,omitempty"`
+	ModifiedBy string `json:"modified_by,omitempty" structs:"modified_by,omitempty"`
+	DeletedBy  string `json:"deleted_by,omitempty" structs:"deleted_by,omitempty"`
+
 	Email    string `json:"email" structs:"email,omitempty"`
 	Password string `json:"password" structs:"password,omitempty"`
 	FullName string `json:"full_name" structs:"full_name,omitempty"`
