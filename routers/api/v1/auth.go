@@ -33,7 +33,7 @@ type RegisterForm struct {
 // @Router /api/auth/register [post]
 func Register(c *gin.Context) {
 	var (
-		logger = logging.Logger{UUID: "0"}
+		logger = logging.Logger{UUID: "AUTH"}
 		appG   = app.Gin{C: c}
 		form   RegisterForm
 		err    error
@@ -183,7 +183,7 @@ func Login(c *gin.Context) {
 // @Router /api/auth/verify [get]
 func Verify(c *gin.Context) {
 	var (
-		logger   = logging.Logger{UUID: "0"}
+		logger   = logging.Logger{UUID: "AUTH"}
 		appG     = app.Gin{C: c}
 		token    = c.Query("token")
 		email    = util.ParseEmailToken(token)
@@ -216,7 +216,7 @@ type ForgotForm struct {
 // @Router /api/auth/forgot [post]
 func Forgot(c *gin.Context) {
 	var (
-		logger = logging.Logger{UUID: "0"}
+		logger = logging.Logger{UUID: "AUTH"}
 		appG   = app.Gin{C: c}
 		form   ForgotForm
 		name   string
@@ -267,7 +267,7 @@ type ResetForm struct {
 // @Router /api/auth/reset [put]
 func Reset(c *gin.Context) {
 	var (
-		logger = logging.Logger{UUID: "0"}
+		logger = logging.Logger{UUID: "AUTH"}
 		appG   = app.Gin{C: c}
 		form   ResetForm
 	)
