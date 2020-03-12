@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"kusnandartoni/starter/pkg/app"
 	"kusnandartoni/starter/pkg/logging"
-	"kusnandartoni/starter/pkg/setting"
 	"kusnandartoni/starter/pkg/util"
 	"kusnandartoni/starter/services/svcclasses"
 	"net/http"
@@ -39,7 +38,7 @@ func GetClasses(c *gin.Context) {
 	classesService := svcclasses.Classes{
 		ID:       id,
 		PageNum:  util.GetPage(c),
-		PageSize: setting.AppSetting.PageSize,
+		PageSize: util.GetPerPage(c),
 	}
 
 	logger.Info(util.Stringify(classesService))
