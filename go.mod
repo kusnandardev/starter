@@ -16,7 +16,7 @@ require (
 	github.com/go-gomail/gomail v0.0.0-20160411212932-81ebce5c23df
 	github.com/go-ini/ini v1.42.0
 	github.com/go-redis/redis v6.15.5+incompatible
-	github.com/google/uuid v1.1.1
+	github.com/google/uuid v1.1.1 // indirect
 	github.com/huandu/xstrings v1.2.0 // indirect
 	github.com/imdario/mergo v0.3.7
 	github.com/jasonlvhit/gocron v0.0.0-20191021204008-47e27a9e0dc7
@@ -24,10 +24,9 @@ require (
 	github.com/jinzhu/gorm v1.9.8
 	github.com/mattn/go-isatty v0.0.8 // indirect
 	github.com/mattn/go-runewidth v0.0.5 // indirect
-	github.com/microcosm-cc/bluemonday v1.0.2
+	github.com/microcosm-cc/bluemonday v1.0.16
 	github.com/mitchellh/mapstructure v1.1.2
 	github.com/olekukonko/tablewriter v0.0.1 // indirect
-	github.com/prometheus/common v0.2.0
 	github.com/russross/blackfriday/v2 v2.0.1
 	github.com/segmentio/ksuid v1.0.2
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
@@ -40,6 +39,7 @@ require (
 	go.mongodb.org/mongo-driver v1.0.3
 	golang.org/x/crypto v0.0.0-20190621222207-cc06ce4a13d4
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df // indirect
 	gopkg.in/ini.v1 v1.42.0 // indirect
 )
 
